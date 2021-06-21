@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ocp-demo-shift
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ocp-demo-shift
+  template:
+    metadata:
+      labels:
+        app: ocp-demo-shift
+    spec:
+      containers:
+      - name: ocp-demo-shift
+        image: luyaozhao2018/ocp-demo-s1:latest
+        ports:
+        - containerPort: 8080
