@@ -4,36 +4,40 @@ kind: Service
 metadata:
   name: ocp-demo-kube
   labels:
-    app: ocp-demo-kube
+    run: ocp-demo-kube
 spec:
   type: NodePort
-  selector:
-    app: ocp-demo-kube
   ports:
     - protocol: TCP
       port: 8080
+      targetPort: 8080
       name: http
+    - port: 443
+      protocol: TCP
+      name: https
+  selector:
+    run: ocp-demo-kube
 
 ---
-apiVersion: v1
-kind: ReplicationController
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: ocp-demo-kube
+  labels:
+    run: ocp-demo-kube
 spec:
-  replicas: 1
+  replicas: 2
+  selector:
+    matchLabels:
+      run: ocp-demo-kube
   template:
     metadata:
       labels:
-        app: ocp-demo-kube
+        run: ocp-demo-kube
     spec:
       containers:
-        - name: ocp-demo-kube
+        - name: ocp-demo
           image: luyaozhao2018/ocp-demo-s1
           ports:
             - containerPort: 8080
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 8010
-            initialDelaySeconds: 30
-            timeoutSeconds: 1
+            - containerPort: 443
