@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: ocp-demo-kube
+  name: ocp-demo-kube-service
   labels:
     run: ocp-demo-kube
 spec:
@@ -12,9 +12,6 @@ spec:
       port: 8080
       targetPort: 8080
       name: http
-    - port: 443
-      protocol: TCP
-      name: https
   selector:
     run: ocp-demo-kube
 
@@ -22,7 +19,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ocp-demo-kube
+  name: ocp-demo-kube-deployment
   labels:
     run: ocp-demo-kube
 spec:
@@ -40,4 +37,3 @@ spec:
           image: luyaozhao2018/ocp-demo-s1
           ports:
             - containerPort: 8080
-            - containerPort: 443

@@ -1,0 +1,33 @@
+kind: "DeploymentConfig"
+apiVersion: "apps.openshift.io/v1"
+metadata:
+  name: "ocp-demo-cli"
+spec:
+  template: 
+    metadata:
+      labels:
+        name: "ocp-demo-cli"
+    spec:
+      containers:
+        - name: "ocp-demo-s1"
+          image: "openshift/ocp-demo-s1"
+          ports:
+            - containerPort: 8080
+              protocol: "TCP"
+  replicas: 2
+  triggers:
+    - type: "ConfigChange" 
+    - type: "ImageChange" 
+      imageChangeParams:
+        automatic: true
+        containerNames:
+          - "ocp-demo-s1"
+        from:
+          kind: ImageStreamTag
+          namespace: luyao-zhao-dev
+          name: 'ocp-demo-s1:v1'
+  strategy: 
+    type: "Rolling"
+  paused: false 
+  revisionHistoryLimit: 2 
+  minReadySeconds: 0
